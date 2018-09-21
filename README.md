@@ -1,1 +1,1 @@
-#pairsnp# pairsnp-python
+# pairsnp-python
