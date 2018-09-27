@@ -18,44 +18,7 @@ def read_fasta(fp):
     if name: yield (name, ''.join(seq))
 
 
-def calculate_consensus(fastafile):
-    seq_names = []
-
-    with open(fastafile) as fasta:
-        # process first sequence and set up count matrix
-        fasta_gen = read_fasta(fasta)
-        h,s = fasta_gen.next()
-        seq_names.append(h)
-        s = np.fromstring(s.lower(), dtype=np.int8)
-        s[(s!=97) & (s!=99) & (s!=103) & (s!=116)] = 110
-        align_length = len(s)
-        count_matrix = np.zeros((5,align_length))
-
-        count_matrix[0,] = count_matrix[0,] + (s==97)
-        count_matrix[1,] = count_matrix[1,] + (s==99)
-        count_matrix[2,] = count_matrix[2,] + (s==103)
-        count_matrix[3,] = count_matrix[3,] + (s==116)
-        count_matrix[4,] = count_matrix[4,] + (s==110)
-
-        for h,s in fasta_gen:
-            seq_names.append(h)
-            s = np.fromstring(s.lower(), dtype=np.int8)
-            s[(s!=97) & (s!=99) & (s!=103) & (s!=116)] = 110
-            count_matrix[0,] = count_matrix[0,] + (s==97)
-            count_matrix[1,] = count_matrix[1,] + (s==99)
-            count_matrix[2,] = count_matrix[2,] + (s==103)
-            count_matrix[3,] = count_matrix[3,] + (s==116)
-            count_matrix[4,] = count_matrix[4,] + (s==110)
-            
-
-        consensus =  np.array([97,99,103,116,110])[np.argmax(count_matrix, axis=0)]
-
-    return seq_names, align_length, consensus
-
-
-def calculate_snp_matrix(fastafile):
-    seq_names, align_length, consensus = calculate_consensus(fastafile)
-    nseqs = len(seq_names)
+def calculate_snp_matrix(fastafile):    
 
     row = np.empty(INITIALISATION_LENGTH)
     col = np.empty(INITIALISATION_LENGTH, dtype=np.int64)
@@ -63,9 +26,23 @@ def calculate_snp_matrix(fastafile):
 
     r = 0
     n_snps = 0
+    nseqs = 0
+    seq_names = []
     current_length = INITIALISATION_LENGTH
     with open(fastafile) as fasta:
         for h,s in read_fasta(fasta):
+            if nseqs==0:
+                align_length = len(s)
+                # Take consensus as first sequence
+                consensus = np.fromstring(s.lower(), dtype=np.int8)
+                consensus[(consensus!=97) & (consensus!=99) & (consensus!=103) & (consensus!=116)] = 110
+
+            nseqs +=1
+            seq_names.append(h)
+
+            if(len(s)!=align_length):
+                raise ValueError('Fasta file appears to have sequences of different lengths!')
+
             s = np.fromstring(s.lower(), dtype=np.int8)
             s[(s!=97) & (s!=99) & (s!=103) & (s!=116)] = 110
             snps = consensus!=s
@@ -82,6 +59,9 @@ def calculate_snp_matrix(fastafile):
             val[n_snps:right] = s[snps]
             r += 1
             n_snps = right
+
+    if nseqs==0:
+        raise ValueError('No sequences found!')
 
     row = row[0:right] 
     col = col[0:right]
