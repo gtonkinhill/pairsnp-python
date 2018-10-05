@@ -1,5 +1,7 @@
 # pairsnp-python
 
+[![Travis-CI Build Status](https://travis-ci.com/gtonkinhill/pairsnp-python.svg?branch=master)](https://travis-ci.com/gtonkinhill/pairsnp-python)
+
 ## Installation
 
 The python version can be installed using `pip` or by downloading the repository and running `setup.py`.
