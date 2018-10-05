@@ -8,3 +8,7 @@ install:
 # command to run tests
 script:
   - python setup.py test
+
+
+notifications:
+    slack: pathogens:8NUkMUXlMNecj9NXnwTKbBQU

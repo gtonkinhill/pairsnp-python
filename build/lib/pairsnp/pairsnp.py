@@ -138,7 +138,7 @@ def main():
     d = calculate_distance_matrix(sparse_matrix, consensus, args.type, args.inc_n)
 
     with open(args.output, 'w') as outfile:
-        np.savetxt(outfile, d, fmt="%d", delimiter=",", 
+        np.savetxt(outfile, d, fmt="%d", delimiter=",", comments="",
             header=",".join(seq_names))
 
     return
