@@ -1,22 +1,15 @@
 # pairsnp-python
 
-[![Travis-CI Build Status](https://travis-ci.com/gtonkinhill/pairsnp-python.svg?branch=master)](https://travis-ci.com/gtonkinhill/pairsnp-python)
+[![Travis-CI Build Status](https://travis-ci.com/sdwfrost/pairsnp-python.svg?branch=master)](https://travis-ci.com/sdwfrost/pairsnp-python)
 
 ## Installation
 
-The python version can be installed using `pip` or by downloading the repository and running `setup.py`.
-
-At the moment it is only available in python2 but I'm planning on converting it to python3.
+This is a Python3 version of Gerry Tonkin-Hill's pairsnp package.
 
 ```
-python -m pip install pairsnp
-```
-
-or alternatively download the repository and run
-
-```
-cd ./pairsnp/python/pairsnp
-python ./setup.py install
+git clone https://github.com/sdwfrost/pairsnp-python
+cd pairsnp-python
+pip3 install .
 ```
 
 ## Quick Start
@@ -51,6 +44,8 @@ optional arguments:
   -f FILENAME, --file FILENAME
                         location of a multiple sequence alignment. Currently
                         only DNA alignments are supported.
+  -z, --zipped          Alignment is gzipped.
+  -c, --csv             Output csv-delimited table (default tsv).
   -o OUTPUT, --out OUTPUT
                         location of output file.
 ```
