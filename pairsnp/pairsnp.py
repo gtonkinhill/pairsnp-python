@@ -1,9 +1,9 @@
-import sys, os
+import sys, os, gzip
 import numpy as np
 import argparse
 from scipy import sparse
 
-INITIALISATION_LENGTH = 100000
+INITIALISATION_LENGTH = 1000000
 
 # This function was taken from https://stackoverflow.com/questions/7654971/parsing-a-fasta-file-using-a-generator-python
 def read_fasta(fp):
@@ -18,7 +18,7 @@ def read_fasta(fp):
     if name: yield (name, ''.join(seq))
 
 
-def calculate_snp_matrix(fastafile):    
+def calculate_snp_matrix(fastafile,zipped=False):    
 
     row = np.empty(INITIALISATION_LENGTH)
     col = np.empty(INITIALISATION_LENGTH, dtype=np.int64)
@@ -29,7 +29,11 @@ def calculate_snp_matrix(fastafile):
     nseqs = 0
     seq_names = []
     current_length = INITIALISATION_LENGTH
-    with open(fastafile) as fasta:
+    if zipped:
+        fh = gzip.open(fastafile, 'rt')
+    else:
+        fh = open(fastafile, 'rt')
+    with fh as fasta:
         for h,s in read_fasta(fasta):
             if nseqs==0:
                 align_length = len(s)
@@ -59,6 +63,7 @@ def calculate_snp_matrix(fastafile):
             val[n_snps:right] = s[snps]
             r += 1
             n_snps = right
+    fh.close()
 
     if nseqs==0:
         raise ValueError('No sequences found!')
@@ -127,19 +132,29 @@ def main():
                        type=str,
                        help='location of a multiple sequence alignment. Currently only DNA alignments are supported.')
 
+    parser.add_argument('-z', '--zipped', dest='zipped', action='store_true',
+                       help='Alignment is gzipped.')
+
+    parser.add_argument('-c', '--csv', dest='csv', action='store_true',
+                       help='Output csv-delimited table (default tsv).')
+
     parser.add_argument('-o', '--out', dest='output', required=True,
                        type=str,
                        help='location of output file.')
 
     args = parser.parse_args()
 
-    sparse_matrix, consensus, seq_names = calculate_snp_matrix(args.filename)
+    sparse_matrix, consensus, seq_names = calculate_snp_matrix(args.filename, args.zipped)
  
     d = calculate_distance_matrix(sparse_matrix, consensus, args.type, args.inc_n)
 
-    with open(args.output, 'w') as outfile:
-        np.savetxt(outfile, d, fmt="%d", delimiter=",", comments="",
-            header=",".join(seq_names))
+    if args.csv:
+        dl = ","
+    else:
+        dl = "\t"
+    with open(args.output, 'wt') as outfile:
+        np.savetxt(outfile, d, fmt="%d", delimiter=dl, comments="",
+            header=dl.join(seq_names))
 
     return
 
