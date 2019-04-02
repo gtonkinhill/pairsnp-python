@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pairsnp",
-    version="0.0.6",
+    version="0.0.7",
     author="Gerry Tonkin-Hill",
     author_email="g.tonkinhill@gmail.com",
     description="A simple package for calculating pairwise SNP distances",
@@ -21,7 +21,7 @@ setuptools.setup(
     },
     packages=setuptools.find_packages(),
     classifiers=[
-        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],

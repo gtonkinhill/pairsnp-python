@@ -1,20 +1,20 @@
 # pairsnp-python
 
-[![Travis-CI Build Status](https://travis-ci.com/sdwfrost/pairsnp-python.svg?branch=master)](https://travis-ci.com/sdwfrost/pairsnp-python)
+[![Travis-CI Build Status](https://travis-ci.com/gtonkinhill/pairsnp-python.svg?branch=master)](https://travis-ci.com/gtonkinhill/pairsnp-python)
 
 ## Installation
 
-This is a Python3 version of Gerry Tonkin-Hill's pairsnp package.
+This is a Python3 version of pairsnp written with the help of Simon Frost
 
 ```
-git clone https://github.com/sdwfrost/pairsnp-python
+git clone https://github.com/gtonkinhill/pairsnp-python
 cd pairsnp-python
 pip3 install .
 ```
 
 ## Quick Start
 
-The python version can be run from the python interpreter as 
+The python version can be run from the python interpreter as
 
 ```
 from pairsnp import calculate_snp_matrix, calculate_distance_matrix
@@ -49,4 +49,3 @@ optional arguments:
   -o OUTPUT, --out OUTPUT
                         location of output file.
 ```
-
