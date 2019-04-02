@@ -20,6 +20,8 @@ class TestPairsnp(unittest.TestCase):
                                                     [4, 4,  0,  5,  5],
                                                     [3, 4,  5,  0,  0],
                                                     [3, 4,  5,  0,  0]])))
+    def test_zipped(self):
+        sparse_matrix, consensus, seq_names = calculate_snp_matrix("./pairsnp/tests/good.aln.gz",True)
 
     def test_empty(self):
         self.failUnlessRaises(ValueError, lambda:calculate_snp_matrix("./pairsnp/tests/empty.aln"))

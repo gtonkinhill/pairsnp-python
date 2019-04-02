@@ -1,2 +1,1 @@
-from __future__ import absolute_import
 from .pairsnp import calculate_snp_matrix, calculate_distance_matrix
